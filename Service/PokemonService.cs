@@ -76,7 +76,7 @@ namespace TrueLayer.Pokedex.Service
         {
           translationResponse = await funtranslationProxy.GetShakespeareTranslation(pokemon.Description);
         }
-        if (translationResponse is null || translationResponse.Success?.Total == 0)
+        if (translationResponse is null || (translationResponse.Success?.Total ?? 0) == 0)
         {
           return new ServiceResult<Pokemon>(pokemon);
         }
