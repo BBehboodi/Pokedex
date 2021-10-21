@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrueLayer.Pokedex.Domain.Dtos;
 using TrueLayer.Pokedex.Service.Proxies;
@@ -95,10 +96,15 @@ namespace TrueLayer.Pokedex.Service
 
     private static Pokemon ToPokemon(PokemonResponse pokemonResponse)
     {
-      string? description = pokemonResponse
+      string? dirtyFlavorText = pokemonResponse
         .FlavorTextEntries
         ?.FirstOrDefault(x => string.Equals(x.Language.Name, EN_LANG))
         ?.FlavorText;
+      string? description = null;
+      if (dirtyFlavorText is not null)
+      {
+        description = Regex.Replace(dirtyFlavorText, @"\n|\r", string.Empty);
+      }
       var pokemon = new Pokemon(
         pokemonResponse.Name,
         pokemonResponse.IsLegendary,
