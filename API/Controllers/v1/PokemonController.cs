@@ -15,11 +15,26 @@ namespace TrueLayer.Pokedex.API.Controllers.v1
       this.pokemonService = pokemonService;
     }
 
-    [HttpGet("{name}")]
     [ActionName("get")]
+    [HttpGet("{name}")]
     public async Task<IActionResult> GetAsync(string name)
     {
       var serviceResult = await pokemonService.GetAsync(name);
+      if (serviceResult.Succeeded)
+      {
+        return Ok(serviceResult.Result);
+      }
+      else
+      {
+        return BadRequest(serviceResult.Errors);
+      }
+    }
+
+    [ActionName("translate")]
+    [HttpGet("translated/{name}")]
+    public async Task<IActionResult> TranslateAsync(string name)
+    {
+      var serviceResult = await pokemonService.TranslateAsync(name);
       if (serviceResult.Succeeded)
       {
         return Ok(serviceResult.Result);

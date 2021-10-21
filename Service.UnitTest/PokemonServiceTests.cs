@@ -10,12 +10,14 @@ namespace Service.UnitTest
   public class PokemonServiceTests
   {
     private readonly Mock<IPokemonProxy> mockedPokemonProxy;
+    private readonly Mock<IFuntranslationProxy> mockedFuntranslationProxy;
     private readonly IPokemonService pokemonService;
 
     public PokemonServiceTests()
     {
       mockedPokemonProxy = new Mock<IPokemonProxy>();
-      pokemonService = new PokemonService(mockedPokemonProxy.Object);
+      mockedFuntranslationProxy = new Mock<IFuntranslationProxy>();
+      pokemonService = new PokemonService(mockedPokemonProxy.Object, mockedFuntranslationProxy.Object);
     }
 
     [Fact]

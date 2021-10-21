@@ -7,6 +7,7 @@ namespace TrueLayer.Pokedex.Service
     public static void AddPokedexServices(this IServiceCollection services)
     {
       services.AddScoped<IPokemonProxy, PokemonProxy>();
+      services.AddScoped<IFuntranslationProxy, FuntranslationProxy>();
       services.AddScoped<IPokemonService, PokemonService>();
     }
   }
