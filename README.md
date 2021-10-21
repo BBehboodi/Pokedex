@@ -24,8 +24,8 @@ Application will be host in the following addresses:
 - http://localhost:5000
 - https://localhost:5001
 
-## API Documention
-Pokemon api fully documented using swagger. after running the application, visit the following addresses to take a look at documention.
+## API Documentation
+Pokemon api fully documented using swagger. after running the application, visit the following addresses to take a look at documentation.
 - http://localhost:5000/swagger/index.html
 - https://localhost:5001/swagger/index.html
 
