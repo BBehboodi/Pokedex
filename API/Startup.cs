@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
@@ -43,10 +44,12 @@ namespace TrueLayer.Pokedex.API
       services.AddSingleton<PokedexConfiguration>();
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
     {
+      logger.LogInformation("Starting application...");
       if (env.IsDevelopment())
       {
+        logger.LogInformation("Is development mode");
         app.UseDeveloperExceptionPage();
         app.UseSwagger(setup => { setup.SerializeAsV2 = true; });
         app.UseSwaggerUI(setup => setup.SwaggerEndpoint("/swagger/v1/swagger.json", "Pokedex v1"));
@@ -57,6 +60,7 @@ namespace TrueLayer.Pokedex.API
       {
         endpoints.MapControllers();
       });
+      logger.LogInformation("Application started");
     }
   }
 }

@@ -8,7 +8,9 @@ Pokemon Rest API challenge
 - Swashbuckle.AspNetCore 6.2.3: https://www.nuget.org/packages/Swashbuckle.AspNetCore
 - Microsoft.Extensions.Http 5.0.0: https://www.nuget.org/packages/Microsoft.Extensions.Http
 - Newtonsoft.Json 13.0.1: https://www.nuget.org/packages/Newtonsoft.Json
-- Moq 4.16.1: https://www.nuget.org/packages/Moq/
+- Moq 4.16.1: https://www.nuget.org/packages/Moq
+- NLog 4.7.11: https://www.nuget.org/packages/NLog
+- NLog.Web.AspNetCore 4.14.0: https://www.nuget.org/packages/NLog.Web.AspNetCore/
 
 ## Third Party APIs
 The following APIs has been used to access the pokemon's information:
@@ -17,7 +19,7 @@ The following APIs has been used to access the pokemon's information:
 - https://funtranslations.com/api/yoda
 
 ## Running Application
-On Windows open command prompt, Clone the repository, change your working dirctory to API directory, and run dotnet run
+On Windows open command prompt, Clone the repository, change your working dirctory to API directory, and run "dotnet run".
 Application will be host in the following addresses: 
 - http://localhost:5000
 - https://localhost:5001
@@ -28,5 +30,5 @@ Pokemon api fully documented using swagger. after running the application, visit
 - https://localhost:5001/swagger/index.html
 
 ## Futuer implementations
-- Versioning the data transfer objects (Dtos)
+- Versioning the data transfer objects (dtos)
 - Impelementing SDK project for usage of other projects (dtos in domain layer should use in SKD project)
