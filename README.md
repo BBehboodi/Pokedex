@@ -29,6 +29,7 @@ Pokemon api fully documented using swagger. after running the application, visit
 - http://localhost:5000/swagger/index.html
 - https://localhost:5001/swagger/index.html
 
-## Futuer implementations
+## Futuer Implementations
+- Writing intergration tests
 - Versioning the data transfer objects (dtos)
 - Impelementing SDK project for usage of other projects (dtos in domain layer should use in SKD project)
