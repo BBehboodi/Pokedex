@@ -103,7 +103,7 @@ namespace TrueLayer.Pokedex.Service
       string? description = null;
       if (dirtyFlavorText is not null)
       {
-        description = Regex.Replace(dirtyFlavorText, @"\n|\r", string.Empty);
+        description = Regex.Replace(dirtyFlavorText, @"\n|\r|\f|\t", " ");
       }
       var pokemon = new Pokemon(
         pokemonResponse.Name,
