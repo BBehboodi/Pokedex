@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using System.IO;
+using System.Reflection;
 using TrueLayer.Pokedex.Service;
 
 namespace TrueLayer.Pokedex.API
@@ -35,6 +36,9 @@ namespace TrueLayer.Pokedex.API
           name: "v1",
           apiInfo
         );
+        string xmlDocument = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        string xmlDocumentPath = Path.Combine(AppContext.BaseDirectory, xmlDocument);
+        setup.IncludeXmlComments(xmlDocumentPath);
       });
       services.AddSingleton<PokedexConfiguration>();
     }

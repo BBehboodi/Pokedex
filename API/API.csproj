@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -6,6 +6,8 @@
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
 		<AssemblyName>TrueLayer.Pokedex.API</AssemblyName>
 		<RootNamespace>TrueLayer.Pokedex.API</RootNamespace>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
 		<Nullable>enable</Nullable>
   </PropertyGroup>
 
