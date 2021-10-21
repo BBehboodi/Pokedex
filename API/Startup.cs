@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TrueLayer.Pokedex.Service;
 
 namespace TrueLayer.Pokedex.API
 {
@@ -10,6 +11,8 @@ namespace TrueLayer.Pokedex.API
   {
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddHttpClient();
+      services.AddPokedexServices();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
