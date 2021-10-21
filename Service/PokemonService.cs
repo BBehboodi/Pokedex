@@ -29,7 +29,7 @@ namespace TrueLayer.Pokedex.Service
         var pokemon = await pokemonProxy.GetAsync(name);
         if (pokemon is null)
         {
-          var errorResult = new ErrorResult(ErrorTypes.NotFound, $"Could not found {name}");
+          var errorResult = new ErrorResult(ErrorTypes.NotFound, $"'{name}' does not exits");
           var serviceResult = new ServiceResult<PokemonResponse>(errorResult);
           return serviceResult;
         }
