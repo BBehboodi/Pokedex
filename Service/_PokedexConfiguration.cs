@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace TrueLayer.Pokedex.Service
 {
   public class PokedexConfiguration
   {
-    [JsonConstructor]
-    public PokedexConfiguration(string pokemonBaseUrl, string funtranslationsBaseUrl)
+    public PokedexConfiguration(IConfiguration configuration)
     {
-      PokemonBaseUrl = pokemonBaseUrl;
-      FuntranslationsBaseUrl = funtranslationsBaseUrl;
+      PokemonBaseUrl = configuration.GetSection("PokemonBaseUrl").Value;
+      FuntranslationsBaseUrl = configuration.GetSection("FuntranslationsBaseUrl").Value;
     }
 
     public string PokemonBaseUrl { get; }

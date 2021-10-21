@@ -36,7 +36,7 @@ namespace TrueLayer.Pokedex.API
           apiInfo
         );
       });
-      services.AddSingleton(new PokedexConfiguration("https://pokeapi.co/api/", "https://api.funtranslations.com/"));
+      services.AddSingleton<PokedexConfiguration>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
