@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrueLayer.Pokedex.Domain.Dtos;
 using TrueLayer.Pokedex.Service.Proxies;
@@ -50,58 +49,56 @@ namespace TrueLayer.Pokedex.Service
       var pokemonResult = await GetAsync(name);
       if (!pokemonResult.Succeeded)
       {
-#pragma warning disable CS8604 // Could not be null
+        if (pokemonResult.Errors is null)
+        {
+          throw new NullReferenceException(nameof(pokemonResult.Errors));
+        }
         return new ServiceResult<Pokemon>(pokemonResult.Errors);
-#pragma warning restore CS8604 // Could not be null
+      }
+
+      var pokemon = pokemonResult.Result;
+      if (pokemon is null)
+      {
+        throw new NullReferenceException(nameof(pokemon));
+      }
+      else if (pokemon.Description is null)
+      {
+        return new ServiceResult<Pokemon>(pokemon);
       }
       else
       {
-        var pokemon = pokemonResult.Result;
-        if (pokemon is null)
+        TranslationResponse? translationResponse;
+        if (pokemon.IsLegendary || string.Equals(pokemon.Habitat, CAVE_HABITAT, StringComparison.OrdinalIgnoreCase))
         {
-          throw new NullReferenceException(nameof(pokemon));
+          translationResponse = await funtranslationProxy.GetYodaTranslation(pokemon.Description);
         }
-        else if (pokemon.Description is null)
+        else
+        {
+          translationResponse = await funtranslationProxy.GetShakespeareTranslation(pokemon.Description);
+        }
+        if (translationResponse is null || translationResponse.Success?.Total == 0)
         {
           return new ServiceResult<Pokemon>(pokemon);
         }
         else
         {
-          TranslationResponse? translationResponse;
-          if (pokemon.IsLegendary || string.Equals(pokemon.Habitat, CAVE_HABITAT, StringComparison.OrdinalIgnoreCase))
-          {
-            translationResponse = await funtranslationProxy.GetYodaTranslation(pokemon.Description);
-          }
-          else
-          {
-            translationResponse = await funtranslationProxy.GetShakespeareTranslation(pokemon.Description);
-          }
-          if (translationResponse is null || translationResponse.Success.Total == 0)
-          {
-            return new ServiceResult<Pokemon>(pokemon);
-          }
-          else
-          {
-            pokemon = new Pokemon(
-              pokemon.Name,
-              pokemon.IsLegendary,
-              pokemon.Habitat,
-              description: translationResponse.Content.Translated
-            );
-            return new ServiceResult<Pokemon>(pokemon);
-          }
+          pokemon = new Pokemon(
+            pokemon.Name,
+            pokemon.IsLegendary,
+            pokemon.Habitat,
+            description: translationResponse.Content.Translated
+          );
+          return new ServiceResult<Pokemon>(pokemon);
         }
       }
     }
 
     private static Pokemon ToPokemon(PokemonResponse pokemonResponse)
     {
-      string? dirtyDescription = pokemonResponse.FlavorTextEntries?.FirstOrDefault(x => x.Language.Name == EN_LANG)?.FlavorText;
-      string? description = null;
-      if (dirtyDescription is not null)
-      {
-        description = Regex.Replace(dirtyDescription, "\n", string.Empty);
-      }
+      string? description = pokemonResponse
+        .FlavorTextEntries
+        ?.FirstOrDefault(x => string.Equals(x.Language.Name, EN_LANG))
+        ?.FlavorText;
       var pokemon = new Pokemon(
         pokemonResponse.Name,
         pokemonResponse.IsLegendary,
