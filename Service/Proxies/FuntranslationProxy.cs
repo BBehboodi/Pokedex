@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TrueLayer.Pokedex.Service.Responses.Translation;
@@ -20,6 +21,10 @@ namespace TrueLayer.Pokedex.Service.Proxies
     {
       var httpClient = httpClientFactory.CreateClient();
       var httpResponse = await httpClient.GetAsync($"{configuration.FuntranslationsBaseUrl}translate/shakespeare.json?text={description}");
+      if (httpResponse.StatusCode == HttpStatusCode.NotFound)
+      {
+        return null;
+      }
       string response = await httpResponse.Content.ReadAsStringAsync();
       var translationResponse = JsonConvert.DeserializeObject<TranslationResponse?>(response);
       return translationResponse;
@@ -29,6 +34,10 @@ namespace TrueLayer.Pokedex.Service.Proxies
     {
       var httpClient = httpClientFactory.CreateClient();
       var httpResponse = await httpClient.GetAsync($"{configuration.FuntranslationsBaseUrl}translate/yoda.json?text={description}");
+      if (httpResponse.StatusCode == HttpStatusCode.NotFound)
+      {
+        return null;
+      }
       string response = await httpResponse.Content.ReadAsStringAsync();
       var translationResponse = JsonConvert.DeserializeObject<TranslationResponse?>(response);
       return translationResponse;
