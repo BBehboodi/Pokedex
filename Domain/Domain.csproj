@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+		<AssemblyName>TrueLayer.Pokedex.Domain</AssemblyName>
+		<RootNamespace>TrueLayer.Pokedex.Domain</RootNamespace>
+		<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
