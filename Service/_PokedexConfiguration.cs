@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TrueLayer.Pokedex.Service.Configuration
+namespace TrueLayer.Pokedex.Service
 {
   public class PokedexConfiguration
   {

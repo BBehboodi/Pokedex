@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using TrueLayer.Pokedex.Service.Configuration;
 using TrueLayer.Pokedex.Service.Dtos.Pokemon;
 
 namespace TrueLayer.Pokedex.Service
