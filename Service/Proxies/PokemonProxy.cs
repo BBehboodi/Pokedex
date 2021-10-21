@@ -2,9 +2,9 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using TrueLayer.Pokedex.Service.Dtos.Pokemon;
+using TrueLayer.Pokedex.Service.Responses.Pokemon;
 
-namespace TrueLayer.Pokedex.Service
+namespace TrueLayer.Pokedex.Service.Proxies
 {
   internal class PokemonProxy : IPokemonProxy
   {
@@ -17,7 +17,7 @@ namespace TrueLayer.Pokedex.Service
       this.configuration = configuration;
     }
 
-    public async Task<Pokemon?> GetAsync(string name)
+    public async Task<PokemonResponse?> GetAsync(string name)
     {
       var httpClient = httpClientFactory.CreateClient();
       var httpResponse = await httpClient.GetAsync($"{configuration.PokemonBaseUrl}v2/pokemon-species/{name}");
@@ -26,8 +26,8 @@ namespace TrueLayer.Pokedex.Service
         return null;
       }
       string response = await httpResponse.Content.ReadAsStringAsync();
-      var pokemon = JsonConvert.DeserializeObject<Pokemon>(response);
-      return pokemon;
+      var pokemonResponse = JsonConvert.DeserializeObject<PokemonResponse?>(response);
+      return pokemonResponse;
     }
   }
 }

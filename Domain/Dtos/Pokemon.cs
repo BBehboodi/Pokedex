@@ -1,8 +1,8 @@
-﻿namespace TrueLayer.Pokedex.Domain.Responses.Pokemon
+﻿namespace TrueLayer.Pokedex.Domain.Dtos
 {
-  public class PokemonResponse
+  public class Pokemon
   {
-    public PokemonResponse(string name, bool isLegendary, string? habitat, string? description)
+    public Pokemon(string name, bool isLegendary, string? habitat, string? description)
     {
       Name = name;
       IsLegendary = isLegendary;

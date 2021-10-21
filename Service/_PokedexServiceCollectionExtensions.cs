@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TrueLayer.Pokedex.Service.Proxies;
 
 namespace TrueLayer.Pokedex.Service
 {

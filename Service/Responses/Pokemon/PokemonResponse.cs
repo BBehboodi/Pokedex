@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace TrueLayer.Pokedex.Service.Dtos.Pokemon
+namespace TrueLayer.Pokedex.Service.Responses.Pokemon
 {
-  internal class Pokemon
+  internal class PokemonResponse
   {
     [JsonConstructor]
-    public Pokemon(int id, string name, bool isLegendary, IReadOnlyList<FlavorTextEntry>? flavorTextEntries, Habitat? habitat)
+    public PokemonResponse(int id, string name, bool isLegendary, IReadOnlyList<FlavorTextEntry>? flavorTextEntries, Habitat? habitat)
     {
       Id = id;
       Name = name;

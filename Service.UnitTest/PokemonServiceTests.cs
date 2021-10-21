@@ -2,7 +2,8 @@ using Moq;
 using System;
 using System.Threading.Tasks;
 using TrueLayer.Pokedex.Service;
-using TrueLayer.Pokedex.Service.Dtos.Pokemon;
+using TrueLayer.Pokedex.Service.Proxies;
+using TrueLayer.Pokedex.Service.Responses.Pokemon;
 using Xunit;
 
 namespace Service.UnitTest
@@ -27,22 +28,22 @@ namespace Service.UnitTest
       string name = "ValidName";
       var habitat = new Habitat("SomeHabitat");
       var flavorTextEntries = Array.Empty<FlavorTextEntry>();
-      var pokemon = new Pokemon(
+      var pokemonResponse = new PokemonResponse(
         id: 1,
         name,
         isLegendary: false,
         flavorTextEntries,
         habitat
       );
-      mockedPokemonProxy.Setup(x => x.GetAsync(name)).ReturnsAsync(pokemon);
+      mockedPokemonProxy.Setup(x => x.GetAsync(name)).ReturnsAsync(pokemonResponse);
 
       // Act
-      var serviceResult = await pokemonService.GetAsync(name);
+      var pokemonResult = await pokemonService.GetAsync(name);
 
       // Assert
-      Assert.True(serviceResult.Succeeded);
-      Assert.Null(serviceResult.Errors);
-      Assert.NotNull(serviceResult.Result);
+      Assert.True(pokemonResult.Succeeded);
+      Assert.Null(pokemonResult.Errors);
+      Assert.NotNull(pokemonResult.Result);
       mockedPokemonProxy.Verify(x => x.GetAsync(name), Times.Once);
     }
 
@@ -54,12 +55,12 @@ namespace Service.UnitTest
       mockedPokemonProxy.Setup(x => x.GetAsync(name)).ReturnsAsync(() => null);
 
       // Act
-      var serviceResult = await pokemonService.GetAsync(name);
+      var pokemonResult = await pokemonService.GetAsync(name);
 
       // Assert
-      Assert.False(serviceResult.Succeeded);
-      Assert.Contains(serviceResult.Errors, error => error.Type == ErrorTypes.NotFound);
-      Assert.Null(serviceResult.Result);
+      Assert.False(pokemonResult.Succeeded);
+      Assert.Contains(pokemonResult.Errors, error => error.Type == ErrorTypes.NotFound);
+      Assert.Null(pokemonResult.Result);
       mockedPokemonProxy.Verify(x => x.GetAsync(name), Times.Once);
     }
 
@@ -70,12 +71,12 @@ namespace Service.UnitTest
       string name = string.Empty;
 
       // Act
-      var serviceResult = await pokemonService.GetAsync(name);
+      var pokemonResult = await pokemonService.GetAsync(name);
 
       // Assert
-      Assert.False(serviceResult.Succeeded);
-      Assert.Contains(serviceResult.Errors, error => error.Type == ErrorTypes.InvalidArgument);
-      Assert.Null(serviceResult.Result);
+      Assert.False(pokemonResult.Succeeded);
+      Assert.Contains(pokemonResult.Errors, error => error.Type == ErrorTypes.InvalidArgument);
+      Assert.Null(pokemonResult.Result);
       mockedPokemonProxy.Verify(x => x.GetAsync(name), Times.Never);
     }
   }

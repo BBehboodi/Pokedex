@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace TrueLayer.Pokedex.Service.Dtos.Pokemon
+namespace TrueLayer.Pokedex.Service.Responses.Pokemon
 {
-  internal class Habitat
+  internal class Language
   {
-    [JsonConstructor]
-    public Habitat(string name)
+    public Language(string name)
     {
       Name = name;
     }

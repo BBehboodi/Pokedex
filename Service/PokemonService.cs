@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using TrueLayer.Pokedex.Domain.Responses.Pokemon;
-using TrueLayer.Pokedex.Service.Dtos.Pokemon;
-using TrueLayer.Pokedex.Service.Dtos.Translation;
+using TrueLayer.Pokedex.Domain.Dtos;
+using TrueLayer.Pokedex.Service.Proxies;
+using TrueLayer.Pokedex.Service.Responses.Pokemon;
+using TrueLayer.Pokedex.Service.Responses.Translation;
 
 namespace TrueLayer.Pokedex.Service
 {
@@ -21,36 +22,36 @@ namespace TrueLayer.Pokedex.Service
       this.funtranslationProxy = funtranslationProxy;
     }
 
-    public async Task<ServiceResult<PokemonResponse>> GetAsync(string name)
+    public async Task<ServiceResult<Pokemon>> GetAsync(string name)
     {
       if (string.IsNullOrEmpty(name))
       {
         var errorResult = new ErrorResult(ErrorTypes.InvalidArgument, $"{nameof(name)} could not be null or empty");
-        return new ServiceResult<PokemonResponse>(errorResult);
+        return new ServiceResult<Pokemon>(errorResult);
       }
       else
       {
-        var pokemon = await pokemonProxy.GetAsync(name);
-        if (pokemon is null)
+        var pokemonResponse = await pokemonProxy.GetAsync(name);
+        if (pokemonResponse is null)
         {
           var errorResult = new ErrorResult(ErrorTypes.NotFound, $"'{name}' does not exits");
-          return new ServiceResult<PokemonResponse>(errorResult);
+          return new ServiceResult<Pokemon>(errorResult);
         }
         else
         {
-          var response = ToResponse(pokemon);
-          return new ServiceResult<PokemonResponse>(response);
+          var pokemon = ToPokemon(pokemonResponse);
+          return new ServiceResult<Pokemon>(pokemon);
         }
       }
     }
 
-    public async Task<ServiceResult<PokemonResponse>> TranslateAsync(string name)
+    public async Task<ServiceResult<Pokemon>> TranslateAsync(string name)
     {
       var pokemonResult = await GetAsync(name);
       if (!pokemonResult.Succeeded)
       {
 #pragma warning disable CS8604 // Could not be null
-        return new ServiceResult<PokemonResponse>(pokemonResult.Errors);
+        return new ServiceResult<Pokemon>(pokemonResult.Errors);
 #pragma warning restore CS8604 // Could not be null
       }
       else
@@ -62,51 +63,52 @@ namespace TrueLayer.Pokedex.Service
         }
         else if (pokemon.Description is null)
         {
-          return new ServiceResult<PokemonResponse>(pokemon);
+          return new ServiceResult<Pokemon>(pokemon);
         }
         else
         {
-          Translation? translation;
+          TranslationResponse? translationResponse;
           if (pokemon.IsLegendary || string.Equals(pokemon.Habitat, CAVE_HABITAT, StringComparison.OrdinalIgnoreCase))
           {
-            translation = await funtranslationProxy.GetYodaTranslation(pokemon.Description);
+            translationResponse = await funtranslationProxy.GetYodaTranslation(pokemon.Description);
           }
           else
           {
-            translation = await funtranslationProxy.GetShakespeareTranslation(pokemon.Description);
+            translationResponse = await funtranslationProxy.GetShakespeareTranslation(pokemon.Description);
           }
-          if (translation is not null)
+          if (translationResponse is null || translationResponse.Success.Total == 0)
           {
-            if (translation.Success.Total > 0)
-            {
-              pokemon = new PokemonResponse(
-                pokemon.Name,
-                pokemon.IsLegendary,
-                pokemon.Habitat,
-                description: translation.Content.Translated
-              );
-            }
+            return new ServiceResult<Pokemon>(pokemon);
+          }
+          else
+          {
+            pokemon = new Pokemon(
+              pokemon.Name,
+              pokemon.IsLegendary,
+              pokemon.Habitat,
+              description: translationResponse.Content.Translated
+            );
+            return new ServiceResult<Pokemon>(pokemon);
           }
         }
-        return new ServiceResult<PokemonResponse>(pokemon);
       }
     }
 
-    private static PokemonResponse ToResponse(Pokemon pokemon)
+    private static Pokemon ToPokemon(PokemonResponse pokemonResponse)
     {
-      string? dirtyDescription = pokemon.FlavorTextEntries?.FirstOrDefault(x => x.Language.Name == EN_LANG)?.FlavorText;
+      string? dirtyDescription = pokemonResponse.FlavorTextEntries?.FirstOrDefault(x => x.Language.Name == EN_LANG)?.FlavorText;
       string? description = null;
       if (dirtyDescription is not null)
       {
         description = Regex.Replace(dirtyDescription, "\n", string.Empty);
       }
-      var response = new PokemonResponse(
-        pokemon.Name,
-        pokemon.IsLegendary,
-        pokemon.Habitat?.Name,
+      var pokemon = new Pokemon(
+        pokemonResponse.Name,
+        pokemonResponse.IsLegendary,
+        pokemonResponse.Habitat?.Name,
         description
       );
-      return response;
+      return pokemon;
     }
   }
 }

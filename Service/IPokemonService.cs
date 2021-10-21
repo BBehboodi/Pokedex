@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using TrueLayer.Pokedex.Domain.Responses.Pokemon;
+using TrueLayer.Pokedex.Domain.Dtos;
 
 namespace TrueLayer.Pokedex.Service
 {
   public interface IPokemonService
   {
-    Task<ServiceResult<PokemonResponse>> GetAsync(string name);
+    Task<ServiceResult<Pokemon>> GetAsync(string name);
 
-    Task<ServiceResult<PokemonResponse>> TranslateAsync(string name);
+    Task<ServiceResult<Pokemon>> TranslateAsync(string name);
   }
 }

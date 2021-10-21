@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace TrueLayer.Pokedex.Service.Dtos.Translation
+namespace TrueLayer.Pokedex.Service.Responses.Translation
 {
-  internal class Translation
+  internal class TranslationResponse
   {
     [JsonConstructor]
-    public Translation(Success success, Content content)
+    public TranslationResponse(Success success, Content content)
     {
       Success = success;
       Content = content;

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TrueLayer.Pokedex.Service.Dtos.Pokemon
+namespace TrueLayer.Pokedex.Service.Responses.Pokemon
 {
   internal class FlavorTextEntry
   {

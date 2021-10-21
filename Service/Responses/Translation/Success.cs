@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TrueLayer.Pokedex.Service.Dtos.Translation
+namespace TrueLayer.Pokedex.Service.Responses.Translation
 {
   internal class Success
   {

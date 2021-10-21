@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
-using TrueLayer.Pokedex.Service.Dtos.Translation;
+using TrueLayer.Pokedex.Service.Responses.Translation;
 
-namespace TrueLayer.Pokedex.Service
+namespace TrueLayer.Pokedex.Service.Proxies
 {
   internal class FuntranslationProxy : IFuntranslationProxy
   {
@@ -16,22 +16,22 @@ namespace TrueLayer.Pokedex.Service
       this.configuration = configuration;
     }
 
-    public async Task<Translation?> GetShakespeareTranslation(string description)
+    public async Task<TranslationResponse?> GetShakespeareTranslation(string description)
     {
       var httpClient = httpClientFactory.CreateClient();
       var httpResponse = await httpClient.GetAsync($"{configuration.FuntranslationsBaseUrl}translate/shakespeare.json?text={description}");
       string response = await httpResponse.Content.ReadAsStringAsync();
-      var translation = JsonConvert.DeserializeObject<Translation?>(response);
-      return translation;
+      var translationResponse = JsonConvert.DeserializeObject<TranslationResponse?>(response);
+      return translationResponse;
     }
 
-    public async Task<Translation?> GetYodaTranslation(string description)
+    public async Task<TranslationResponse?> GetYodaTranslation(string description)
     {
       var httpClient = httpClientFactory.CreateClient();
       var httpResponse = await httpClient.GetAsync($"{configuration.FuntranslationsBaseUrl}translate/yoda.json?text={description}");
       string response = await httpResponse.Content.ReadAsStringAsync();
-      var translation = JsonConvert.DeserializeObject<Translation?>(response);
-      return translation;
+      var translationResponse = JsonConvert.DeserializeObject<TranslationResponse?>(response);
+      return translationResponse;
     }
   }
 }
